@@ -70,16 +70,41 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
   void _generateQuestion() {
     Random random = Random();
 
-    // Choisir la couleur de réponse correcte (chosenColor)
-    int chosenIndex = random.nextInt(8);
-    correctAnswer = colorValues[chosenIndex];
+    // Choisir la couleur d'Ã©criture (qui devient la bonne rÃ©ponse)
+    int colorIndex = random.nextInt(8);
+    questionColor = _getColorByIndex(colorIndex);
+    questionText = _getColorNameByIndex(colorIndex);
+    correctAnswer = questionColor;  // La bonne rÃ©ponse est la couleur affichÃ©e
+  }
 
-    // Choisir la couleur d'écriture (textColor)
-    int textIndex = random.nextInt(8);
-    questionColor = colorValues[textIndex];
+  // Fonction sÃ»re pour obtenir la couleur par index
+  Color _getColorByIndex(int index) {
+    switch(index) {
+      case 0: return Colors.red;
+      case 1: return Colors.blue;
+      case 2: return Colors.green;
+      case 3: return Colors.yellow;
+      case 4: return Colors.orange;
+      case 5: return Colors.purple;
+      case 6: return Colors.pink;
+      case 7: return Colors.grey;
+      default: return Colors.black;
+    }
+  }
 
-    // Afficher le nom de la couleur d'écriture
-    questionText = colorNames[textIndex];
+  // Fonction sÃ»re pour obtenir le nom de couleur par index
+  String _getColorNameByIndex(int index) {
+    switch(index) {
+      case 0: return 'ROUGE';
+      case 1: return 'BLEU';
+      case 2: return 'VERT';
+      case 3: return 'JAUNE';
+      case 4: return 'ORANGE';
+      case 5: return 'VIOLET';
+      case 6: return 'ROSE';
+      case 7: return 'GRIS';
+      default: return 'NOIR';
+    }
   }
 
   void _startTimer() {
@@ -109,7 +134,7 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
         _scoreAnimationController.reverse();
       });
 
-      // Pause avant de générer la prochaine question
+      // Pause avant de gï¿½nï¿½rer la prochaine question
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           _generateQuestion();
@@ -137,7 +162,7 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Partie terminée !'),
+          title: const Text('Partie terminï¿½e !'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -148,7 +173,7 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
                   ? 'Excellent reflexe cognitif !'
                   : score >= 50
                     ? 'Bon travail !'
-                    : 'Continue de t\'entraîner !',
+                    : 'Continue de t\'entraï¿½ner !',
                 style: TextStyle(
                   color: score >= 100
                     ? Colors.green
@@ -276,7 +301,7 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
 
             // Indication
             const Text(
-              'Clique sur la COULEUR RÉELLE',
+              'Clique sur la COULEUR Rï¿½ELLE',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
 
@@ -293,20 +318,21 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
                 ),
                 itemCount: 8,
                 itemBuilder: (context, index) {
+                  Color buttonColor = _getColorByIndex(index);
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     child: ElevatedButton(
-                      onPressed: () => _checkAnswer(colorValues[index]),
+                      onPressed: () => _checkAnswer(buttonColor),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: colorValues[index],
-                        foregroundColor: _getContrastColor(colorValues[index]),
+                        backgroundColor: buttonColor,
+                        foregroundColor: _getContrastColor(buttonColor),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: Text(
-                        colorNames[index],
+                        _getColorNameByIndex(index),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -341,7 +367,7 @@ class _ColorGameState extends State<ColorGame> with TickerProviderStateMixin {
   }
 
   Color _getContrastColor(Color backgroundColor) {
-    // Calculer la luminance pour déterminer si on doit utiliser du texte noir ou blanc
+    // Calculer la luminance pour dï¿½terminer si on doit utiliser du texte noir ou blanc
     double luminance = (0.299 * backgroundColor.red + 0.587 * backgroundColor.green + 0.114 * backgroundColor.blue) / 255;
     return luminance > 0.5 ? Colors.black : Colors.white;
   }
