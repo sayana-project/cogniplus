@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cogniplus/screens/bottom_navigation/home.screen.dart';
-import 'package:cogniplus/screens/bottom_navigation/princ_navigation.dart';
+import 'home.screen.dart';
+import 'princ_navigation.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const PrincNavigationBar(),
+      home: const HomeScreen(),
     );
   }
 }
